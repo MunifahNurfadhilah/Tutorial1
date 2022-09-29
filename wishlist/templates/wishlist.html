@@ -1,25 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h5>Nama: </h5>
-<b>{{nama}}</b>
 
-<table>
-    <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
+<!doctype html>
+<html lang="en">
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+  </head>
+  <body>
+        <nav class="navbar bg-light">
+            <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Welcome, {{nama}}!</span>
+            <button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+            </div>
+          </nav>
+    <table class="table table-bordered border-primary">
+        <thead class="table-primary">
+        <tr>
+        <th>Nama Barang</th>
+        <th>Harga Barang</th>
+        <th>Deskripsi</th>
     </tr>
-    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-    {% for barang in list_barang %}
+    </thead>
+        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+        {% for barang in list_barang %}
     <tr>
         <th>{{barang.nama_barang}}</th>
         <th>{{barang.harga_barang}}</th>
         <th>{{barang.deskripsi}}</th>
     </tr>
-    {% endfor %}
-</table>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
-
+        {% endfor %}
+    </table>
+        <h5 style= "text-align: center;">Sesi terakhir login: {{ last_login }}</h5>
+        
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  </body>
+</html>
 {% endblock content %}
