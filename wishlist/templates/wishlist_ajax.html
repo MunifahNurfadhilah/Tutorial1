@@ -5,12 +5,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
   function updateTable(){
-    // clear table
-    var itemCount = $(".table > tbody").children().length;
-    for(var i = itemCount; i >= 2; i--){
-      $(".table > tbody > tr:nth-child(" + i + ")").remove();
-    }
-
     $.get("http://localhost:8000/wishlist/json/", function(data) {
       // fill table
       for(var i = 0; i < data.length; i++){
@@ -39,7 +33,6 @@
       var harga = $("#input_harga").val();
       var deskripsi = $("#input_deskripsi").val();
 
-      
       $.post("http://localhost:8000/wishlist/ajax/submit/",
       {
         nama,
@@ -48,7 +41,21 @@
       },
       function(data, status){
         console.log("add wishlist success");
-        updateTable();
+
+        var tr = document.createElement("tr");
+        var tdNama = document.createElement("td");
+        tdNama.append(nama);
+        var tdHarga = document.createElement("td");
+        tdHarga.append(harga);
+        var tdDeskripsi = document.createElement("td");
+        tdDeskripsi.append(deskripsi);
+        
+        tr.append(tdNama);
+        tr.append(tdHarga);
+        tr.append(tdDeskripsi);
+        
+        $(".table").append(tr);
+
         $("#input_nama").val("");
         $("#input_harga").val("");
         $("#input_deskripsi").val("");
@@ -80,14 +87,6 @@
         <th>Deskripsi</th>
     </tr>
     </thead>
-        {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-        {% for barang in list_barang %}
-    <tr>
-        <th>{{barang.nama_barang}}</th>
-        <th>{{barang.harga_barang}}</th>
-        <th>{{barang.deskripsi}}</th>
-    </tr>
-        {% endfor %}
     </table>
     
     <h5 class="mt-4">Tambah Barang</h5>

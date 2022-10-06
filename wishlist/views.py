@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from wishlist.models import BarangWishlist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 
 from django.shortcuts import redirect
@@ -75,25 +75,32 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
-@login_required(login_url='/wishlist/login/')
 def wishlist_ajax(req):
     data_barang_wishlist = BarangWishlist.objects.all()
     context = {
+        'list_barang': data_barang_wishlist,
         'nama': 'Munifah Nurfadhilah',
         'last_login': req.COOKIES['last_login'],
-        'list_barang': data_barang_wishlist,
     }
     return render(req, "wishlist_ajax.html", context)
 
 @login_required(login_url='/wishlist/login/')
 @csrf_exempt
-def add_wishlist(req):
-    if req.method == "POST":
-        nama = req.POST.get("nama")
-        harga = req.POST.get("harga")
-        deskripsi = req.POST.get("deskripsi")
-        BarangWishlist.objects.create(nama_barang=nama, harga_barang=harga, deskripsi=deskripsi)
-        return HttpResponse()
-    else:
-        print("here")
-        return redirect("wishlist:show_wishlist")
+def add_wishlist(request):
+    response_data = {}
+
+    if request.POST.get('action') == 'post':
+        nama_barang = request.POST.get('nama_barang')
+        harga_barang =  request.POST.get('harga_barang')
+        deskripsi = request.POST.get('deskripsi')
+
+        response_data['nama_barang'] = nama_barang
+        response_data['harga_barang'] = harga_barang
+        response_data['deskripsi'] = deskripsi
+
+        BarangWishlist.objects.create(
+            nama_barang = nama_barang,
+            harga_barang = harga_barang,
+            deskripsi = deskripsi,
+            )
+        return JsonResponse(response_data)
